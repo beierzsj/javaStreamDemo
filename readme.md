@@ -1,4 +1,4 @@
-#Java Stream 案例
+# Java Stream 案例
 
 函数式编程最早是数学家阿隆佐·邱奇研究的一套函数变换逻辑，又称Lambda Calculus（λ-Calculus），所以也经常把函数式编程称为Lambda计算。
 
