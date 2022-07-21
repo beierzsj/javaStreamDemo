@@ -1,29 +1,27 @@
 package com.stream.example.demo;
 
+import com.stream.example.demo.Shoe;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MyJavaStreamsTest {
+class JavaStreamDemoTest {
 
     private static final List<String> stringsList = Arrays.asList("a", "b", "c");
 
-    private static final Car volkswagenGolf = new Car(0, "Volkswagen", "Golf", "blue");
-    private static final Car skodaOctavia = new Car(1, "Skoda", "Octavia", "green");
-    private static final Car renaultKadjar = new Car(2, "Renault", "Kadjar", "red");
-    private static final Car volkswagenTiguan = new Car(3, "Volkswagen", "Tiguan", "red");
+    private static final Shoe volkswagenGolf = new Shoe(0, "Volkswagen", "L", "blue");
+    private static final Shoe skodaOctavia = new Shoe(1, "Skoda", "XL", "green");
+    private static final Shoe renaultKadjar = new Shoe(2, "Renault", "XXL", "red");
+    private static final Shoe volkswagenTiguan = new Shoe(3, "Volkswagen", "M", "red");
 
     @Test
     public void createStreamsFromCollection() {
@@ -52,8 +50,8 @@ class MyJavaStreamsTest {
     @Test
     public void createStreamsFromFile() {
         try {
-            List<String> expectedLines = Arrays.asList("line1", "line2", "line3");
-            BufferedReader reader = new BufferedReader(new FileReader(new File("test/com/mydeveloperplanet/inputfile.txt")));
+            List<String> expectedLines = Arrays.asList("file1", "file2", "file3","file4");
+            BufferedReader reader = new BufferedReader(new FileReader(new File(System.getProperty("user.dir")+"/src/main/resources/file.txt")));
             List<String> streamedLines = reader.lines().collect(Collectors.toList());
             assertLinesMatch(expectedLines, streamedLines);
         } catch (FileNotFoundException e) {
@@ -63,19 +61,19 @@ class MyJavaStreamsTest {
 
     @Test
     public void filterStream() {
-        List<Car> expectedCars = Arrays.asList(volkswagenGolf, volkswagenTiguan);
-        List<Car> filteredCars = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                       .filter(car -> car.getBrand().equals("Volkswagen"))
-                                       .collect(Collectors.toList());
-        assertIterableEquals(expectedCars, filteredCars);
+        List<Shoe> expectedShoes = Arrays.asList(volkswagenGolf, volkswagenTiguan);
+        List<Shoe> filteredShoes = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
+                .filter(car -> car.getBrand().equals("Volkswagen"))
+                .collect(Collectors.toList());
+        assertIterableEquals(expectedShoes, filteredShoes);
     }
 
     @Test
     public void mapStream() {
         List<String> expectedBrands = Arrays.asList("Volkswagen", "Skoda", "Renault", "Volkswagen");
         List<String> brands = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                    .map(Car::getBrand)
-                                    .collect(Collectors.toList());
+                .map(Shoe::getBrand)
+                .collect(Collectors.toList());
         assertIterableEquals(expectedBrands, brands);
     }
 
@@ -83,9 +81,9 @@ class MyJavaStreamsTest {
     public void filterMapStream() {
         List<String> expectedColors = Arrays.asList("blue", "red");
         List<String> volkswagenColors = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                              .filter(car -> car.getBrand().equals("Volkswagen"))
-                                              .map(Car::getColor)
-                                              .collect(Collectors.toList());
+                .filter(car -> car.getBrand().equals("Volkswagen"))
+                .map(Shoe::getColor)
+                .collect(Collectors.toList());
         assertIterableEquals(expectedColors, volkswagenColors);
     }
 
@@ -93,9 +91,9 @@ class MyJavaStreamsTest {
     public void distinctStream() {
         List<String> expectedBrands = Arrays.asList("Volkswagen", "Skoda", "Renault");
         List<String> brands = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                    .map(Car::getBrand)
-                                    .distinct()
-                                    .collect(Collectors.toList());
+                .map(Shoe::getBrand)
+                .distinct()
+                .collect(Collectors.toList());
         assertIterableEquals(expectedBrands, brands);
     }
 
@@ -103,9 +101,9 @@ class MyJavaStreamsTest {
     public void sortedStream() {
         List<String> expectedSortedBrands = Arrays.asList("Renault", "Skoda", "Volkswagen", "Volkswagen");
         List<String> brands = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                    .map(Car::getBrand)
-                                    .sorted()
-                                    .collect(Collectors.toList());
+                .map(Shoe::getBrand)
+                .sorted()
+                .collect(Collectors.toList());
         assertIterableEquals(expectedSortedBrands, brands);
     }
 
@@ -113,11 +111,11 @@ class MyJavaStreamsTest {
     public void peekStream() {
         List<String> expectedColors = Arrays.asList("blue", "red");
         List<String> volkswagenColors = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                              .filter(car -> car.getBrand().equals("Volkswagen"))
-                                              .peek(e -> System.out.println("Filtered value: " + e))
-                                              .map(Car::getColor)
-                                              .peek(e -> System.out.println("Mapped value: " + e))
-                                              .collect(Collectors.toList());
+                .filter(car -> car.getBrand().equals("Volkswagen"))
+                .peek(e -> System.out.println("Filtered value: " + e))
+                .map(Shoe::getColor)
+                .peek(e -> System.out.println("Mapped value: " + e))
+                .collect(Collectors.toList());
         assertIterableEquals(expectedColors, volkswagenColors);
     }
 
@@ -125,43 +123,43 @@ class MyJavaStreamsTest {
     public void collectJoinStream() {
         String expectedBrands = "Volkswagen;Skoda;Renault;Volkswagen";
         String joinedBrands = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                    .map(Car::getBrand)
-                                    .collect(Collectors.joining(";"));
+                .map(Shoe::getBrand)
+                .collect(Collectors.joining(";"));
         assertEquals(expectedBrands, joinedBrands);
     }
 
     @Test
     public void collectSummingIntStream() {
         int sumIds = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                           .collect(Collectors.summingInt(Car::getId));
-       assertEquals(6, sumIds);
+                .collect(Collectors.summingInt(Shoe::getId));
+        assertEquals(6, sumIds);
     }
 
     @Test
     public void collectGroupingByStream() {
-        Map<String, List<Car>> expectedCars = new HashMap<>();
-        expectedCars.put("Skoda", Arrays.asList(skodaOctavia));
-        expectedCars.put("Renault", Arrays.asList(renaultKadjar));
-        expectedCars.put("Volkswagen", Arrays.asList(volkswagenGolf, volkswagenTiguan));
+        Map<String, List<Shoe>> expectedShoes = new HashMap<>();
+        expectedShoes.put("Skoda", Arrays.asList(skodaOctavia));
+        expectedShoes.put("Renault", Arrays.asList(renaultKadjar));
+        expectedShoes.put("Volkswagen", Arrays.asList(volkswagenGolf, volkswagenTiguan));
 
-        Map<String, List<Car>> groupedCars = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                                                   .collect(Collectors.groupingBy(Car::getBrand));
+        Map<String, List<Shoe>> groupedShoes = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
+                .collect(Collectors.groupingBy(Shoe::getBrand));
 
-        assertTrue(expectedCars.equals(groupedCars));
+        assertTrue(expectedShoes.equals(groupedShoes));
     }
 
     @Test
     public void reduceStream() {
         int sumIds = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                           .map(Car::getId)
-                           .reduce(0, Integer::sum);
+                .map(Shoe::getId)
+                .reduce(0, Integer::sum);
         assertEquals(6, sumIds);
     }
 
     @Test
     public void forEachStream() {
         Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-              .forEach(System.out::println);
+                .forEach(System.out::println);
     }
 
     @Test
@@ -173,9 +171,9 @@ class MyJavaStreamsTest {
     @Test
     public void maxStream() {
         int maxId = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                          .map(Car::getId)
-                          .max((o1, o2) -> o1.compareTo(o2))
-                          .orElse(-1);
+                .map(Shoe::getId)
+                .max((o1, o2) -> o1.compareTo(o2))
+                .orElse(-1);
         assertEquals(3, maxId);
     }
 }
