@@ -63,7 +63,7 @@ class JavaStreamDemoTest {
     public void filterStream() {
         List<Shoe> expectedShoes = Arrays.asList(volkswagenGolf, volkswagenTiguan);
         List<Shoe> filteredShoes = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                .filter(car -> car.getBrand().equals("Volkswagen"))
+                .filter(shoe -> shoe.getBrand().equals("Volkswagen"))
                 .collect(Collectors.toList());
         assertIterableEquals(expectedShoes, filteredShoes);
     }
@@ -81,7 +81,7 @@ class JavaStreamDemoTest {
     public void filterMapStream() {
         List<String> expectedColors = Arrays.asList("blue", "red");
         List<String> volkswagenColors = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                .filter(car -> car.getBrand().equals("Volkswagen"))
+                .filter(shoe -> shoe.getBrand().equals("Volkswagen"))
                 .map(Shoe::getColor)
                 .collect(Collectors.toList());
         assertIterableEquals(expectedColors, volkswagenColors);
@@ -111,7 +111,7 @@ class JavaStreamDemoTest {
     public void peekStream() {
         List<String> expectedColors = Arrays.asList("blue", "red");
         List<String> volkswagenColors = Stream.of(volkswagenGolf, skodaOctavia, renaultKadjar, volkswagenTiguan)
-                .filter(car -> car.getBrand().equals("Volkswagen"))
+                .filter(shoe -> shoe.getBrand().equals("Volkswagen"))
                 .peek(e -> System.out.println("Filtered value: " + e))
                 .map(Shoe::getColor)
                 .peek(e -> System.out.println("Mapped value: " + e))
